@@ -1,1 +1,91 @@
-type: vertical-stackcards:  - type: custom:mushroom-title-card    title: Analyse    title_tap_action:      action: navigate      navigation_path: /energy  - type: conditional    conditions:      - entity: sensor.total_dc_power        state: '0'    card:      square: false      type: grid      cards:        - type: custom:mushroom-template-card          primary: Batterie Morgens          secondary: >-            {%if states.sensor.pv_batterie_morgensrestladung.state|int<0 %}Nicht            verf%C3%BCgbar{%elif            states.sensor.pv_batterie_morgensrestladung.state|int>20 %}zu            ~{{states.sensor.pv_batterie_morgensrestladung.state}}% voll            {%else%}kleiner 20% !{%endif%}          icon: mdi:battery-charging-100          icon_color: >-            {%if states.sensor.pv_batterie_morgensrestladung.state|int<0            %}grey{%elif            states.sensor.pv_batterie_morgensrestladung.state|int>20            %}green{%else%}orange{%endif%}          tap_action:            action: more-info          entity: sensor.pv_batterie_morgensrestladung        - type: custom:mushroom-template-card          primary: Produktion          secondary: in {{states.sensor.pv_zeit_zu_start_produktion.state}} Stunden          icon: mdi:camera-timer          entity: sensor.pv_zeit_zu_ende_produktion          icon_color: orange          tap_action:            action: more-info      columns: 2  - type: conditional    conditions:      - entity: sensor.total_dc_power        state_not: '0'    card:      square: false      type: grid      cards:        - type: custom:mushroom-template-card          primary: Min Batteriestand          secondary: >-            {%if            states.sensor.pv_minimum_batterie_prozent.state>states.sensor.battery_level.state            and (states.sensor.pv_minimum_batterie_prozent.state|int)>0 and            (states.sensor.pv_minimum_batterie_prozent.state|int-states.sensor.battery_level.state|int)>0%}            {{states.sensor.pv_minimum_batterie_prozent.state|int-states.sensor.battery_level.state|int}}%            fehlen noch            {%elif states.sensor.pv_minimum_batterie_prozent.state|int>0%}            {{states.sensor.pv_minimum_batterie_prozent.state|int}}% ist            erreicht{%else%}{%endif%}          icon: mdi:battery-30          icon_color: >+            {%if            states.sensor.pv_minimum_batterie_prozent.state|int(0)>states.sensor.battery_level.state|int%}orange{%else%}green{%endif%}          tap_action:            action: more-info        - type: custom:mushroom-template-card          primary: Produktion          secondary: noch {{states.sensor.pv_zeit_zu_ende_produktion.state}} Stunden          icon: mdi:camera-timer          entity: sensor.pv_zeit_zu_ende_produktion          icon_color: orange          tap_action:            action: more-info        - type: custom:mushroom-template-card          primary: Batterie Abends          secondary: >-            {%if states.sensor.pv_batterie_ladestand_abends.state|int(0)>95 and            states.sensor.pv_batterie_ladezeit.state|int(0)>-0.1%}100% voll{%            elif states.sensor.pv_batterie_ladezeit.state|int<0.1%} nicht genug            solar{%else%}zu            ~{{states.sensor.pv_batterie_ladestand_abends.state}} voll {%endif%}          icon: mdi:battery-charging-100          icon_color: >-            {%if states.sensor.pv_batterie_ladestand_abends.state|int(0)>95 and            states.sensor.pv_batterie_ladezeit.state|int(0)>-0.1 %}green{%elif            states.sensor.pv_batterie_ladezeit.state|int(0)<0.1%}{%else%}orange{%endif%}          tap_action:            action: more-info          entity: sensor.pv_batterie_ladestand_abends        - type: custom:mushroom-template-card          primary: Restladezeit          secondary: >            {%if states.sensor.pv_batterie_ladezeit.state|int(0)<0.1 and            states.sensor.pv_batterie_ladezeit.state|int(0)>-0.1%} ist            voll{%elif            states.sensor.pv_batterie_ladezeit.state|int(0)<0.1%}nicht genug            Solar {%else%}noch {{states.sensor.pv_batterie_ladezeit.state}}            Stunden{%endif%}          icon: mdi:camera-timer          entity: sensor.pv_batterie_ladezeit          icon_color: >-            {%if states.sensor.pv_batterie_ladezeit.state|int(0)==0.0            %}green{%else%}orange{%endif%}          tap_action:            action: more-info      columns: 2
+type: vertical-stackcards:
+  - type: custom:mushroom-title-card
+    title: Analyse
+    title_tap_action:
+      action: navigate
+      navigation_path: /energy
+  - type: conditional
+    conditions:
+      - entity: sensor.total_dc_power
+        state: '0'
+    card:
+      square: false
+      type: grid
+      cards:
+        - type: custom:mushroom-template-card
+          primary: Batterie Morgens
+          secondary:>-
+            {%if states.sensor.pv_batterie_morgensrestladung.state|int<0 %}Nicht            verf%C3%BCgbar{%elif            states.sensor.pv_batterie_morgensrestladung.state|int>20 %}zu            ~{{states.sensor.pv_batterie_morgensrestladung.state}}% voll            {%else%}kleiner 20% !{%endif%}
+          icon: mdi:battery-charging-100
+          icon_color: >-
+            {%if states.sensor.pv_batterie_morgensrestladung.state|int<0            %}grey{%elif            states.sensor.pv_batterie_morgensrestladung.state|int>20            %}green{%else%}orange{%endif%}
+          tap_action:
+            action: more-info
+          entity: sensor.pv_batterie_morgensrestladung
+        - type: custom:mushroom-template-card
+          primary: Produktion
+          secondary: in {{states.sensor.pv_zeit_zu_start_produktion.state}} Stunden
+          icon: mdi:camera-timer
+          entity: sensor.pv_zeit_zu_ende_produktion
+          icon_color: orange
+          tap_action:
+            action: more-info
+      columns: 2
+  - type: conditional
+    conditions:
+      - entity: sensor.total_dc_power
+        state_not: '0'
+    card:
+      square: false
+      type: grid
+      cards:
+        - type: custom:mushroom-template-card
+          primary: Min Batteriestand
+          secondary: >-
+            {%if            states.sensor.pv_minimum_batterie_prozent.state>states.sensor.battery_level.state
+            and (states.sensor.pv_minimum_batterie_prozent.state|int)>0 and            (states.sensor.pv_minimum_batterie_prozent.state|int-states.sensor.battery_level.state|int)>0%}            {{states.sensor.pv_minimum_batterie_prozent.state|int-states.sensor.battery_level.state|int}}%            fehlen noch
+            {%elif states.sensor.pv_minimum_batterie_prozent.state|int>0%}            {{states.sensor.pv_minimum_batterie_prozent.state|int}}% ist
+            erreicht{%else%}{%endif%}
+          
+          icon: mdi:battery-30
+          icon_color: >+
+            {%if
+            states.sensor.pv_minimum_batterie_prozent.state|int(0)>states.sensor.battery_level.state|int%}orange{%else%}green{%endif%}
+          tap_action:
+            action: more-info
+        - type: custom:mushroom-template-card
+          primary: Produktion
+          secondary: noch {{states.sensor.pv_zeit_zu_ende_produktion.state}} Stunden
+          icon: mdi:camera-timer
+          entity: sensor.pv_zeit_zu_ende_produktion
+          icon_color: orange
+          tap_action:
+            action: more-info
+        - type: custom:mushroom-template-card
+          primary: Batterie Abends
+          secondary: >-
+            {%if states.sensor.pv_batterie_ladestand_abends.state|int(0)>95 and            states.sensor.pv_batterie_ladezeit.state|int(0)>-0.1%}100% voll{%
+            elif states.sensor.pv_batterie_ladezeit.state|int<0.1%} nicht genug
+            solar{%else%}zu
+            ~{{states.sensor.pv_batterie_ladestand_abends.state}} voll {%endif%}
+          icon: mdi:battery-charging-100
+          icon_color: >-
+            {%if states.sensor.pv_batterie_ladestand_abends.state|int(0)>95 and            states.sensor.pv_batterie_ladezeit.state|int(0)>-0.1 %}green{%elif            states.sensor.pv_batterie_ladezeit.state|int(0)<0.1%}{%else%}orange{%endif%}
+          tap_action:
+            action: more-info
+          entity: sensor.pv_batterie_ladestand_abends
+        - type: custom:mushroom-template-card
+          primary: Restladezeit
+          secondary: >            {%if states.sensor.pv_batterie_ladezeit.state|int(0)<0.1 and            states.sensor.pv_batterie_ladezeit.state|int(0)>-0.1%} ist
+            voll{%elif
+            states.sensor.pv_batterie_ladezeit.state|int(0)<0.1%}nicht genug
+            Solar {%else%}noch {{states.sensor.pv_batterie_ladezeit.state}}
+            Stunden{%endif%}
+          icon: mdi:camera-timer
+          entity: sensor.pv_batterie_ladezeit
+          icon_color: >-
+            {%if states.sensor.pv_batterie_ladezeit.state|int(0)==0.0
+            %}green{%else%}orange{%endif%}
+          tap_action:
+            action: more-info
+      columns: 2

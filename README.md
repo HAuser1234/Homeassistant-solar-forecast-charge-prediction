@@ -18,7 +18,7 @@ all features are tested and only approximate real circumstances!
 * example lovelace card (mushroom required)
 
 # ToDo
-any pull requests to improve the code are appreciated!
+any contributions to improve the code are appreciated!
 * compleate english translation (most entitys have english description in code)
 * improve konfiguration
 * improve accuracy
@@ -26,7 +26,7 @@ any pull requests to improve the code are appreciated!
 * use local weather data to improve prediction
 
 # Installation
-please pull request ANY upgrades to the card or algorythm thia helps everybody!
+please contribute ANY upgrades to the card or algorythm thia helps everybody!
 1. copy all files oft the battery-predict.yaml into your custom yaml integrations folder
 2. make changes for your individual setup (set entity ids battery size, avg consumtion...)
 3. copy the card as a manual yaml config into lovelace. !mushroom required!

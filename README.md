@@ -1,4 +1,4 @@
-# Homeassistant-solar-battery-charge-prediction
+# Offline Homeassistant-solar-battery-charge-prediction
 Homeassistant solar battery charge prediction with display card.
 Works plug and play with the modbus sungrow integration for HA (https://github.com/mkaiser/Sungrow-SHx-Inverter-Modbus-Home-Assistant)
 
@@ -7,6 +7,7 @@ Works plug and play with the modbus sungrow integration for HA (https://github.c
 # Features
 all features are tested and only approximate real circumstances!
 
+* fully offline!
 * predict battery state at evening after charging
 * predict battery state at morning after decharging
 * predict battery charging time
@@ -21,6 +22,7 @@ any pull requests to improve the code are appreciated!
 * improve konfiguration
 * improve accuracy
 * sometimes the prediction fails by calculating negative percentages because of insufficient solar. this should be limited to realistic values (0-100%)
+* use local weather data to improve prediction
 
 # Installation
 please pull request ANY upgrades to the card or algorythm thia helps everybody!

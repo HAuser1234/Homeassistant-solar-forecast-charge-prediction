@@ -1,4 +1,4 @@
-# Offline Homeassistant-solar-battery-charge-prediction
+# Offline Homeassistant-solar-forecast-and-battery-state-forecast
 Homeassistant solar battery charge prediction with display card.
 Works plug and play with the modbus sungrow integration for HA (https://github.com/mkaiser/Sungrow-SHx-Inverter-Modbus-Home-Assistant)
 

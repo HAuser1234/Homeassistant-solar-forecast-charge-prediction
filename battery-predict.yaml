@@ -1,0 +1,73 @@
+#
+# Solar battery Calc
+#
+
+sensor:
+  - platform: statistics
+    name: PVHausverbrauchAVG
+    entity_id: sensor.load_power  # Setting: Power used by home sensor
+    state_characteristic: mean
+    max_age:
+      minutes: 120
+  - platform: statistics
+    name: PVBatterieNutungAVG
+    entity_id: sensor.pv_batterie_power
+    state_characteristic: mean
+    max_age:
+      minutes: 120
+
+template:
+  - sensor:
+      - name: PV Netz Power
+        #friendly_name: PV export import Power
+        unit_of_measurement: W
+        # Setting: set export and import power
+        state: "{{states.sensor.import_power.state | int(0) - states.sensor.export_power.state | int(0)}}"
+      - name: PV Batterie Power
+        #friendly_name: PV battery charge discharge Power
+        unit_of_measurement: W
+        # Setting: Set battery charge and discharge Power
+        state: "{{states.sensor.battery_charging_power.state | int(0) - states.sensor.battery_discharging_power.state | int(0)}}"
+      - name: PV Nacht laenge
+        #friendly_name: PV night length
+        unit_of_measurement: h
+        state: "{% set nr = as_timestamp(state_attr('sun.sun','next_rising')) %}{% set ns = as_timestamp(state_attr('sun.sun','next_setting')) %}{% if nr > ns %}{% set nr = nr - 60*60*24 %}{% endif %}{{ (24-(ns - nr))|timestamp_custom('%H',false)|float(0)+60/(24-(ns - nr))|timestamp_custom('%m',false)|int(0)/10}}"
+      - name: PV minimum Batterie Prozent
+        #friendly_name: PV battery minimum charge
+        unit_of_measurement: "%"
+        # Setting: Set notstrom to your individual power reserve sensor or Value, Set 400 to average power use at night
+        state: "{% set l = states.sensor.pv_nacht_laenge.state|int(0)%}{% set minChargePerc = (l*1.3*400)/12000*100+states.sensor.reserved_soc_for_backup.state|int(0) %}{{minChargePerc}}"
+      - name: PV Prod bis Sonnenuntergang
+        #friendly_name: PV production power till sunset
+        unit_of_measurement: kWh
+        state: "{% if states.sensor.total_dc_power.state | int(0) > 0%}{% set ProdForec = states.sensor.energy_production_today.state | int(0) - states.sensor.daily_pv_generation.state | int(0) /1000 | int(0)%}{%else%}{% set ProdForec= 0%}{%endif%}{{ProdForec| float(0)}}"
+      - name: PV Zeit zu Start Produktion
+        #friendly_name: PV time till start production
+        unit_of_measurement: h
+        state: "{% set toProd = ((((((state_attr('sun.sun', 'next_rising')| as_timestamp + (40*60))|as_datetime|as_local) - now()).seconds / 60) |int(0))/60) | round(2)| float(0)%}{{toProd| float(0)}}"
+      - name: PV Zeit zu Ende Produktion
+        #friendly_name: PV time till end of production
+        unit_of_measurement: h
+        state: "{% set endProd = ((((((state_attr('sun.sun', 'next_setting')| as_timestamp - (40*60))|as_datetime|as_local) - now()).seconds / 60) |int(0))/60)  | round(2)| float(0)%} {{endProd| float(0)}}"
+      #Secondary Calculations
+      - name: PV Verbrauch bis Sonnenaufgang
+        #friendly_name: PV power used till sunrise
+        unit_of_measurement: W
+        state: "{% set useToSunRise = (states.sensor.PVHausverbrauchAVG.state | int(0))*(states.sensor.pv_zeit_zu_start_produktion.state| float(0)) %}{{useToSunRise| float(0)}}"
+      - name: PV Batterie Ladezeit
+        #friendly_name: PV battery charge time till full
+        unit_of_measurement: h
+        state: "{% if states.sensor.pv_zeit_zu_ende_produktion.state|int(0)>0 %}{% set BatChargT = ((12000-(states.sensor.battery_level.state |int(0))/100*12000)/(states.sensor.PVBatterieNutungAVG.state| float(0))) | float(0) | round(1)%}{%else%}{% set BatChargT = 0%}{%endif%}{{BatChargT| float(0)}}"
+      #Tertiary Calculations
+      - name: PV Batterie morgensRestladung W
+        #friendly_name: PV battery left charge wh
+        unit_of_measurement: W
+        state: "{% if states.sensor.total_dc_power.state | int(0) < 1 | int(0) %}{% set BatStateDawnW = (states.sensor.battery_level.state |int(0))/100*12000-(states.sensor.pv_verbrauch_bis_sonnenaufgang.state |int(0)) %}{%else%}{% set BatStateDawnW = -1%}{%endif%}{{BatStateDawnW| float(0)}}"
+      - name: PV Batterie morgensRestladung %
+        #friendly_name: PV predicted battery state at morning
+        unit_of_measurement: "%"
+        state: "{% if states.sensor.total_dc_power.state | int(0) < 1%}{% set BatStateDawnP = ((((states.sensor.battery_level.state |int(0))/100*12000-states.sensor.pv_verbrauch_bis_sonnenaufgang.state | int(0))/12000*100) | round(1))| float(0) %}{%else%}{% set BatStateDawnP = -1%}{%endif%}{{BatStateDawnP| float(0)}}"
+      - name: PV Batterie Ladestand Abends
+        #friendly_name: PV predicted battery state at evening
+        unit_of_measurement: "%"
+        state: "{% if states.sensor.pv_zeit_zu_ende_produktion.state |float(0) - states.sensor.pv_batterie_ladezeit.state | float(0) >0%}{% set BatStateDusk = 100%}{%else%}{% set BatStateDusk = ((12000-(states.sensor.pv_zeit_zu_ende_produktion.state | float(0) - states.sensor.pv_batterie_ladezeit.state | float(0) )*(-1)*states.sensor.PVBatterieNutungAVG.state | float(0) )/12000*100) | int(0) %} {%endif%}{{BatStateDusk| float(0)}}"

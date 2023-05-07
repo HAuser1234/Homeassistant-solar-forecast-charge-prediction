@@ -4,7 +4,7 @@ Works plug and play with the modbus sungrow integration for HA (https://github.c
 
 <img width="605" alt="Bildschirmfoto 2023-05-07 um 09 57 38" src="https://user-images.githubusercontent.com/122117318/236665268-436fb44c-4a21-4e54-83fc-a4d706aa5e6d.png">
 
-# features
+# Features
 all features are tested and only approximate real circumstances!
 
 * predict battery state at evening after charging
@@ -20,6 +20,13 @@ any pull requests to improve the code are appreciated!
 * compleate english translation (most entitys have english description in code)
 * improve konfiguration
 * improve accuracy
+* sometimes the prediction fails by calculating negative percentages because of insufficient solar. this should be limited to realistic values (0-100%)
+
+# Installation
+please pull request ANY upgrades to the card or algorythm thia helps everybody!
+1. copy all files oft the battery-predict.yaml into your custom yaml integrations folder
+2. make changes for your individual setup (set entity ids battery size, avg consumtion...)
+3. copy the card as a manual yaml config into lovelace. !mushroom required!
 
 
 _

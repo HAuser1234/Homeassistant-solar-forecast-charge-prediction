@@ -1,4 +1,5 @@
-type: vertical-stackcards:
+type: vertical-stack
+cards:
   - type: custom:mushroom-title-card
     title: Analyse
     title_tap_action:

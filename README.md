@@ -9,6 +9,7 @@ Works plug and play with the modbus sungrow integration for HA (https://github.c
 <img width="605" alt="Bildschirmfoto 2023-05-07 um 09 57 38" src="https://user-images.githubusercontent.com/122117318/236665268-436fb44c-4a21-4e54-83fc-a4d706aa5e6d.png">
 (first row is only shown when there is no production/ second and third row is shown when there is production.
 
+If you like this repository please leave a star ⭐
 # Features
 all features are tested and only approximate real circumstances!
 

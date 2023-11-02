@@ -48,7 +48,7 @@ template:
       - name: PV Zeit zu Ende Produktion
         #friendly_name: PV time till end of production
         unit_of_measurement: h
-        state: "{% set endProd = ((((((state_attr('sun.sun', 'next_setting')| as_timestamp - (40*60))|as_datetime|as_local) - now()).seconds / 60) |int(0))/60)  | round(2)| float(0)%} {{endProd| float(0)}}"
+        state: "{% if 'above_horizon' in states('sun.sun') %} {% set endProd = ((((((state_attr('sun.sun', 'next_setting')| as_timestamp - (40*60))|as_datetime|as_local) - now()).seconds / 60) |int(0))/60)  | round(2)| float(0)%} {% else%} {% set endProd = 0 | float(0) %} {%endif%} {{endProd| float(0)}}"
       #Secondary Calculations
       - name: PV Verbrauch bis Sonnenaufgang
         #friendly_name: PV power used till sunrise

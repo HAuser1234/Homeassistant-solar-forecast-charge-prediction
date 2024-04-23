@@ -1,42 +1,39 @@
 # Offline Homeassistant-solar-forecast-and-battery-state-forecast
 <a href="https://www.buymeacoffee.com/hauser1234" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
-
-
 Homeassistant solar battery charge prediction with display card.
 Works plug and play with the modbus sungrow integration for HA (https://github.com/mkaiser/Sungrow-SHx-Inverter-Modbus-Home-Assistant)
 
 <img width="605" alt="Bildschirmfoto 2023-05-07 um 09 57 38" src="https://user-images.githubusercontent.com/122117318/236665268-436fb44c-4a21-4e54-83fc-a4d706aa5e6d.png">
-(first row is only shown when there is no production/ second and third row is shown when there is production.
+(The first row is only shown when there is no production / second and third rows are shown when there is production.
 
 If you like this repository please leave a star ⭐
 # Features
-all features are tested and only approximate real circumstances!
+All features are tested and only approximate real circumstances!
 
 * fully offline!
-* predict battery state at evening after charging
-* predict battery state at morning after decharging
-* predict battery charging time
-* predict minimum charge needed to get over night
-* predict time left of solar
-* predict start of charging
-* example lovelace card (mushroom required)
+* predict battery state in the evening after charging.
+* predict battery state in the morning after discharging.
+* predict battery charging time.
+* predict the minimum charge needed to get overnight.
+* predict the time left of solar.
+* predict the start of charging.
+* example Lovelace card (mushroom required).
 
 # ToDo
-any contributions to improve the code are appreciated!
-* compleate english translation (most entitys have english description in code)
-* improve konfiguration
+Any contributions to improve the code are appreciated!
+* Complete English translation (most entities have English descriptions in code)
+* improve configuration
 * improve accuracy
 * sometimes the prediction fails by calculating negative percentages because of insufficient solar. this should be limited to realistic values (0-100%)
 * use local weather data to improve prediction
 
 # Installation
-please contribute ANY upgrades to the card or algorythm thia helps everybody!
-1. copy all files oft the battery-predict.yaml into your custom yaml integrations folder
-2. make changes for your individual setup (set entity ids battery size, avg consumtion...)
-3. copy the card as a manual yaml config into lovelace. !mushroom required!
+please contribute ANY upgrades to the card or algorithm this helps everybody!
+1. copy all files oft the `battery-predict.yaml` into your custom yaml integrations folder
+2. make changes appropriate to your setup (set entity IDs, battery size, average consumption...)
+3. copy the card as a manual yaml config into Lovelace. !mushroom required!
 4. edit the current production of solar entity in the conditional cards 
-
 
 _
 
